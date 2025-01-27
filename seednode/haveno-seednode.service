@@ -1,0 +1,35 @@
+[Unit]
+Description=Haveno seednode
+After=network.target
+
+[Service]
+User=haveno
+Group=haveno
+SyslogIdentifier=Haveno-Seednode
+
+# $PATH is a placeholder
+ExecStart=/bin/sh $PATH/haveno-seednode --baseCurrencyNetwork=XMR_STAGENET\
+  --useLocalhostForP2P=false\
+  --useDevPrivilegeKeys=false\
+# Uncomment the following line to use external tor
+#  --hiddenServiceAddress=example.onion\
+  --nodePort=2002\
+  --appName=haveno-XMR_STAGENET_Seed_2002\
+  --xmrNode=http://[::1]:38088
+
+ExecStop=/bin/kill ${MAINPID} ; sleep 5
+Restart=always
+
+# Hardening
+PrivateTmp=true
+ProtectSystem=full
+NoNewPrivileges=true
+PrivateDevices=true
+MemoryDenyWriteExecute=false
+ProtectControlGroups=true
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
+
+
+[Install]
+WantedBy=multi-user.target
